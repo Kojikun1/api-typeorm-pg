@@ -32,7 +32,7 @@ class ToolController {
 
            await repository.save(newTool);
 
-           return res.status(200).json({...newTool, tags: JSON.parse(newTool.tags)});
+           return res.status(201).json({...newTool, tags: JSON.parse(newTool.tags)});
       }
       async search(req: Request , res: Response ){
       const { tag } = req.query;

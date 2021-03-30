@@ -78,6 +78,14 @@ npm run dev
  }
 ```
 
+- Crie um arquivo .env na pasta raíz do projeto com as sua secreat key :
+
+```
+
+APP_SECRET=yoursecreatkey
+
+```
+
 ---
 
 Desenvolvido por Bruno Frank Barbosa Duarte
