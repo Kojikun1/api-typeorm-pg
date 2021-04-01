@@ -1,9 +1,19 @@
 import {Request, Response } from 'express';
-import { getRepository, Repository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import User from '../models/User';
 
-
 class UserController{
+     async index( req: Request, res: Response){
+          const repository = getRepository(User);
+
+          console.log(req.userId);
+
+          const user = await repository.findOne({where: { id: req.userId }, relations: ["tools"]});
+
+          if(user) user.password = '';
+
+          return res.status(200).json(user);
+     }
      async store(req: Request , res: Response){
          const { email , password } = req.body;
          try {

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn  } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn  } from 'typeorm';
 import User from './User';
 
 @Entity("tools")
@@ -18,7 +18,7 @@ class Tool {
     @Column()
     tags: string
     
-    @ManyToOne(type => User, tools => Tool)
+    @ManyToOne(() => User, user => user.tools)
     user: User;
 }
 

@@ -13,6 +13,7 @@ router.get('/tools',authMiddleware, ToolsController.search);
 router.delete("/tools/:id",authMiddleware,  ToolsController.delete);
 
 router.post("/user",UserController.store);
+router.get('/user/index',authMiddleware ,UserController.index);
 
 router.post('/session', SessionController.store);
 

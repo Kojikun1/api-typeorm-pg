@@ -28,24 +28,31 @@ class ToolController {
  
             if(tool){
                 return res.status(409).json("A Tool with this email already exists");
+
+
             }
- 
-            const newTool = repository.create({title, link, description, tags: JSON.stringify(tags) }); 
- 
-            await repository.save(newTool);
- 
+
             const user = await getRepository(User).findOne({where: { id: req.userId }});
+
+            if(user) user.password = '';
  
-            if(user){
+            const newTool = repository.create({title, link, description, tags: JSON.stringify(tags), user }); 
+              
+            await repository.save(newTool);
+            
+           /* if(user){
+              console.log("user Exist");
               if(user.tools){
+                 console.log("add to existent");
                  user.tools = [...user.tools,newTool];
               }else {
+                 console.log("add new");
                  user.tools = [newTool];
               } 
  
              await getRepository(User).save(user);
  
-            }
+            } */
  
              return res.status(201).json({...newTool, tags: JSON.parse(newTool.tags)});
            } catch (error) {

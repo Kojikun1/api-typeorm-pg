@@ -12,14 +12,15 @@ class User {
     
     @Column()
     password: string;
+
+    @OneToMany(() => Tool, tool => tool.user)
+    tools: Tool[];
     
     @BeforeInsert()
     @BeforeUpdate()
     hashPassword(){
         this.password = bcrypt.hashSync(this.password,8);
     }
-    @OneToMany(type => Tool,user => User)
-    tools: Tool[];
 };
 
 export default User;
