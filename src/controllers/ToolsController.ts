@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import Tool from '../models/Tool';
+import User from '../models/User';
 
 class ToolController {
       async index(req: Request , res: Response) {
@@ -31,6 +32,15 @@ class ToolController {
            const newTool = repository.create({title, link, description, tags: JSON.stringify(tags) }); 
 
            await repository.save(newTool);
+
+           const user = await getRepository(User).findOne({where: { id: req.userId }});
+
+           if(user){
+            user.tools = [...user.tools,newTool];
+
+            await getRepository(User).save(user);
+
+           }
 
            return res.status(201).json({...newTool, tags: JSON.parse(newTool.tags)});
       }
