@@ -21,28 +21,37 @@ class ToolController {
 
            const tags = req.body.tags;
 
-           const repository = getRepository(Tool);
+           try {
+            const repository = getRepository(Tool);
 
-           const tool = await repository.findOne({where: { title }});
-
-           if(tool){
-               return res.status(409).json("A Tool with this email already exists");
+            const tool = await repository.findOne({where: { title }});
+ 
+            if(tool){
+                return res.status(409).json("A Tool with this email already exists");
+            }
+ 
+            const newTool = repository.create({title, link, description, tags: JSON.stringify(tags) }); 
+ 
+            await repository.save(newTool);
+ 
+            const user = await getRepository(User).findOne({where: { id: req.userId }});
+ 
+            if(user){
+              if(user.tools){
+                 user.tools = [...user.tools,newTool];
+              }else {
+                 user.tools = [newTool];
+              } 
+ 
+             await getRepository(User).save(user);
+ 
+            }
+ 
+             return res.status(201).json({...newTool, tags: JSON.parse(newTool.tags)});
+           } catch (error) {
+             console.log(error);
+             return res.status(400).json({message: "Falure to create Tool"});
            }
-
-           const newTool = repository.create({title, link, description, tags: JSON.stringify(tags) }); 
-
-           await repository.save(newTool);
-
-           const user = await getRepository(User).findOne({where: { id: req.userId }});
-
-           if(user){
-            user.tools = [...user.tools,newTool];
-
-            await getRepository(User).save(user);
-
-           }
-
-           return res.status(201).json({...newTool, tags: JSON.parse(newTool.tags)});
       }
       async search(req: Request , res: Response ){
       const { tag } = req.query;

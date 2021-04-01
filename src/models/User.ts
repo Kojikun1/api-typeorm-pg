@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, ManyToMany, JoinTable  } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, OneToMany  } from 'typeorm';
 import bcrypt from 'bcrypt';
 import Tool from './Tool';
 
@@ -18,8 +18,7 @@ class User {
     hashPassword(){
         this.password = bcrypt.hashSync(this.password,8);
     }
-    @ManyToMany(type => Tool)
-    @JoinTable()
+    @OneToMany(type => Tool,user => User)
     tools: Tool[];
 };
 
